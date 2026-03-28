@@ -13,7 +13,7 @@ Just built a website for a pharmacy store named **Getwell Medicos** — check it
 ## Features
 
 - Responsive design — works on all screen sizes (360px and above)
-- Prescription upload with WhatsApp notification to the owner
+- Prescription request via WhatsApp — customer shares name & phone, owner calls back
 - Google Maps embed with exact shop location
 - Services, medicine categories, contact info & working hours
 - Floating WhatsApp button for instant contact

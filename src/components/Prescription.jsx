@@ -1,41 +1,25 @@
-import { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
 import Container from './Container';
 
 const OWNER_WHATSAPP = '919872633001';
 
 const steps = [
-  { n: '1', label: 'Upload Photo' },
+  { n: '1', label: 'Fill Details' },
   { n: '2', label: 'We Review' },
   { n: '3', label: 'We Call You' },
 ];
 
 export default function Prescription() {
-  const inputRef = useRef(null);
-  const [fileName, setFileName] = useState(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-
-  function handleFileChange(e) {
-    const file = e.target.files?.[0];
-    if (file) setFileName(file.name);
-  }
 
   function handleSendWhatsApp(e) {
     e.preventDefault();
     const customerName = name.trim() || 'Not provided';
     const customerPhone = phone.trim() || 'Not provided';
-    const prescriptionInfo = fileName
-      ? `Prescription file: ${fileName}`
-      : 'No file uploaded — customer will send prescription separately.';
 
-    const message =
-      `🔔 *New Prescription Request*\n\n` +
-      `👤 *Name:* ${customerName}\n` +
-      `📞 *Phone:* ${customerPhone}\n` +
-      `📋 *${prescriptionInfo}*\n\n` +
-      `Please review and call the customer back.`;
+    const message = `Name: ${customerName}\nPhone: ${customerPhone}`;
 
     const url = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -105,8 +89,7 @@ export default function Prescription() {
               className="mt-3 font-sans font-light leading-relaxed text-sm sm:text-base"
               style={{ color: 'rgba(255,255,255,0.55)' }}
             >
-              Upload a photo or send it directly on WhatsApp — we'll handle the
-              rest and get back to you.
+              Share your name and phone number — we'll reach out to you on WhatsApp and guide you through the rest.
             </p>
           </AnimateOnScroll>
 
@@ -173,71 +156,12 @@ export default function Prescription() {
             </div>
           </AnimateOnScroll>
 
-          {/* Upload box */}
-          <AnimateOnScroll direction="up" delay={0.35}>
-            <motion.button
-              type="button"
-              onClick={() => inputRef.current?.click()}
-              className="mt-3 w-full rounded-lg text-center cursor-pointer transition-colors duration-200"
-              style={{
-                background: 'rgba(75,159,212,0.05)',
-                borderRadius: 8,
-                padding: '32px 16px',
-                border: '1.5px dashed rgba(75,159,212,0.55)',
-                boxShadow: 'inset 0 0 40px rgba(75,159,212,0.03)',
-              }}
-              animate={
-                !fileName
-                  ? { borderColor: ['rgba(75,159,212,0.35)', 'rgba(75,159,212,0.7)', 'rgba(75,159,212,0.35)'] }
-                  : { borderColor: 'rgba(75,159,212,0.8)' }
-              }
-              transition={{ duration: 2, repeat: fileName ? 0 : Infinity }}
-              initial={false}
-              whileHover={{ scale: 1.01, background: 'rgba(75,159,212,0.09)' }}
-            >
-              {fileName ? (
-                <div className="flex flex-col items-center gap-1">
-                  <span style={{ color: '#4b9fd4', fontSize: 28 }}>✓</span>
-                  <span className="font-sans font-medium" style={{ color: '#7bb8e0', fontSize: 13 }}>
-                    {fileName}
-                  </span>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-2">
-                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
-                    xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3">
-                    <rect width="48" height="48" rx="12" fill="rgba(75,159,212,0.1)" />
-                    <path d="M14 18h4l2-3h8l2 3h4a2 2 0 012 2v14a2 2 0 01-2 2H14a2 2 0 01-2-2V20a2 2 0 012-2z"
-                      stroke="#4b9fd4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="24" cy="26" r="4" stroke="#4b9fd4" strokeWidth="1.5"/>
-                  </svg>
-                  <span className="font-sans font-medium text-sm sm:text-base" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                    Drop your prescription here
-                  </span>
-                  <span className="font-sans text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                    JPG, PNG or PDF — max 5MB
-                  </span>
-                </div>
-              )}
-            </motion.button>
-          </AnimateOnScroll>
-
-          {/* Hidden file input */}
-          <input
-            ref={inputRef}
-            id="prescription-upload-trigger"
-            type="file"
-            accept="image/*,application/pdf"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-
           {/* WhatsApp button */}
-          <AnimateOnScroll direction="up" delay={0.4}>
+          <AnimateOnScroll direction="up" delay={0.35}>
             <button
               type="button"
               onClick={handleSendWhatsApp}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-md py-4 font-sans text-base font-bold text-white min-h-[52px] cursor-pointer transition-opacity hover:opacity-90"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-md py-4 font-sans text-base font-bold text-white min-h-[52px] cursor-pointer transition-opacity hover:opacity-90"
               style={{ backgroundColor: '#25D366' }}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22" fill="white" style={{ flexShrink: 0 }}>
@@ -245,11 +169,9 @@ export default function Prescription() {
               </svg>
               Send on WhatsApp
             </button>
-            {fileName && (
-              <p className="mt-2 text-center font-sans text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                WhatsApp will open — please attach your prescription photo there before sending.
-              </p>
-            )}
+            <p className="mt-2 text-center font-sans text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              WhatsApp will open — please attach your prescription photo before sending.
+            </p>
           </AnimateOnScroll>
 
         </div>
