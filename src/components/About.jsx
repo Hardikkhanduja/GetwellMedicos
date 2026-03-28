@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import AnimateOnScroll from './AnimateOnScroll';
 import Container from './Container';
 
-const badges = ['✓ Licensed', '✓ Genuine Stock', '✓ Expert Staff'];
+const badges = ['✓ Licensed', '✓ Genuine Stock', '✓ Expert Staff', '🚚 Pan-India Delivery'];
 
 export default function About() {
   return (
@@ -53,8 +53,9 @@ export default function About() {
               </h3>
               <p className="mt-2 font-sans font-light leading-relaxed text-muted text-sm md:text-base">
                 Located at Booth No. 13, Sector 35C, Chandigarh, Getwell Medicos
-                has been a trusted name for genuine medicines and quality
-                healthcare products for over a decade.
+                has been a trusted name for over a decade. We stock prescription
+                medicines, nutraceuticals, oncology drugs, and medical devices —
+                and deliver Pan-India via courier.
               </p>
 
               {/* Trust badges */}

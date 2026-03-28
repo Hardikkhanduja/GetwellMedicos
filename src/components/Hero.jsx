@@ -3,8 +3,8 @@ import AnimateOnScroll from './AnimateOnScroll';
 import Container from './Container';
 
 const stats = [
-  { value: '1000+', label: 'Medicines' },
-  { value: '10+', label: 'Years' },
+  { value: '5000+', label: 'Medicines' },
+  { value: '15+', label: 'Years' },
   { value: '100%', label: 'Genuine' },
 ];
 
@@ -82,8 +82,8 @@ export default function Hero() {
                 className="mt-4 md:mt-6 font-sans font-light leading-relaxed text-sm sm:text-base md:text-lg max-w-full md:max-w-lg"
                 style={{ color: 'rgba(255,255,255,0.6)' }}
               >
-                Genuine medicines, trusted care. Serving the families of Chandigarh
-                with integrity and expertise.
+                Genuine medicines, trusted care. Serving Chandigarh and
+                delivering Pan-India via courier — with integrity and expertise.
               </motion.p>
 
               {/* CTA buttons */}
@@ -107,6 +107,11 @@ export default function Hero() {
                   </svg>
                   Get Directions
                 </a>
+              </motion.div>
+
+              {/* Pan-India delivery badge */}
+              <motion.div variants={itemVariants} className="mt-4 mb-2 flex items-center gap-2">
+                <span className="text-[#7bb8e0] text-xs sm:text-sm">🚚 Pan-India courier delivery available</span>
               </motion.div>
 
               {/* Divider */}

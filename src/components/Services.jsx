@@ -7,6 +7,8 @@ const services = [
   { icon: '🩺', name: 'Medical Devices', desc: 'BP monitors, glucometers, thermometers & more' },
   { icon: '👶', name: 'Baby & Mother Care', desc: 'Nutrition, skincare & hygiene essentials' },
   { icon: '🛒', name: 'OTC Products', desc: 'Over-the-counter medicines & everyday health essentials' },
+  { icon: '🧬', name: 'Nutraceuticals', desc: 'Health supplements, vitamins, protein & wellness products' },
+  { icon: '🎗️', name: 'Oncology Medicines', desc: 'Specialised cancer care medicines — sourced & delivered with care' },
 ];
 
 export default function Services() {

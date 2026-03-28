@@ -5,6 +5,7 @@ const categories = [
   'Antibiotics', 'Diabetes', 'Cardiac',
   'Vitamins', 'Pain Relief', 'Skin Care',
   'Respiratory', 'Eye & ENT', 'Surgical',
+  'Nutraceuticals', 'Oncology',
 ];
 
 export default function Categories() {
