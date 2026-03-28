@@ -89,7 +89,7 @@ export default function Hero() {
               {/* CTA buttons */}
               <motion.div variants={itemVariants} className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <a
-                  href="#contact"
+                  href="tel:+919872633001"
                   className="flex items-center justify-center rounded-md bg-[#4b9fd4] w-full sm:w-auto px-6 py-4 text-base font-semibold text-white transition-colors hover:bg-[#3a8ec3] min-h-[52px]"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8, flexShrink: 0 }}>
