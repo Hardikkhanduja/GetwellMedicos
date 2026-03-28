@@ -3,7 +3,7 @@ import AnimateOnScroll from './AnimateOnScroll';
 import Container from './Container';
 
 const OWNER_WHATSAPP = '919872633001';
-const API_URL = 'https://YOUR-RENDER-URL.onrender.com/api/prescription';
+const API_URL = 'https://getwellmedicos.onrender.com/';
 
 const steps = [
   { n: '1', label: 'Fill Details' },
