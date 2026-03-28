@@ -18,12 +18,11 @@ const upload = multer({
   }
 });
 
-// ── Resend setup ──
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 // ── POST /api/prescription ──
 router.post('/prescription', upload.single('prescription'), async (req, res) => {
   try {
+    // ── Resend setup (inside handler so env vars are guaranteed loaded) ──
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const { name, phone } = req.body;
     const file = req.file;
 
