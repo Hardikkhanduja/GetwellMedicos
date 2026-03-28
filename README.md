@@ -1,10 +1,14 @@
-# Getwell Medicos
+# Getwell Medicos 💊
 
-Official website for **Getwell Medicos** — a licensed pharmacy located at Booth No. 13, Sector 35C, Chandigarh.
+Just built a website for a pharmacy store named **Getwell Medicos** — check it out and feedback on the website is appreciated!
 
 🔗 **Repo:** [github.com/Hardikkhanduja/GetwellMedicos](https://github.com/Hardikkhanduja/GetwellMedicos.git)
 
 ---
+
+## About
+
+**Getwell Medicos** is a licensed pharmacy located at Booth No. 13, Sector 35C, Chandigarh. This website was built to give the store a proper online presence with all the info customers need.
 
 ## Features
 
