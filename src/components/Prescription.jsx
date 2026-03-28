@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
 import Container from './Container';
 
 const OWNER_WHATSAPP = '919872633001';
+const API_URL = 'https://YOUR-RENDER-URL.onrender.com/api/prescription';
 
 const steps = [
   { n: '1', label: 'Fill Details' },
@@ -13,17 +14,47 @@ const steps = [
 export default function Prescription() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(null); // { type: 'success'|'error', message: '' }
+  const fileInputRef = useRef(null);
 
-  function handleSendWhatsApp(e) {
-    e.preventDefault();
-    const customerName = name.trim() || 'Not provided';
-    const customerPhone = phone.trim() || 'Not provided';
+  const handleSubmit = async () => {
+    if (!name.trim() || !phone.trim()) {
+      setStatus({ type: 'error', message: 'Please enter your name and phone number.' });
+      return;
+    }
+    if (!file) {
+      setStatus({ type: 'error', message: 'Please upload your prescription photo.' });
+      return;
+    }
 
-    const message = `Name: ${customerName}\nPhone: ${customerPhone}`;
+    setLoading(true);
+    setStatus(null);
 
-    const url = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }
+    const formData = new FormData();
+    formData.append('name', name.trim());
+    formData.append('phone', phone.trim());
+    formData.append('prescription', file);
+
+    try {
+      const response = await fetch(API_URL, { method: 'POST', body: formData });
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus({ type: 'success', message: '✅ Prescription sent! We will call you back shortly.' });
+        setName('');
+        setPhone('');
+        setFile(null);
+      } else {
+        setStatus({ type: 'error', message: data.message });
+      }
+    } catch {
+      setStatus({ type: 'error', message: 'Network error. Please send your prescription on WhatsApp instead.' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section
@@ -89,7 +120,7 @@ export default function Prescription() {
               className="mt-3 font-sans font-light leading-relaxed text-sm sm:text-base"
               style={{ color: 'rgba(255,255,255,0.55)' }}
             >
-              Share your name and phone number — we'll reach out to you on WhatsApp and guide you through the rest.
+              Upload your prescription and share your details — we'll review it and call you back shortly.
             </p>
           </AnimateOnScroll>
 
@@ -133,10 +164,7 @@ export default function Prescription() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full rounded-lg py-3 px-4 text-white text-base placeholder:text-white/30 focus:outline-none transition-all duration-200"
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                }}
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
                 onFocus={(e) => { e.target.style.borderColor = 'rgba(75,159,212,0.5)'; }}
                 onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; }}
               />
@@ -146,31 +174,96 @@ export default function Prescription() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full rounded-lg py-3 px-4 text-white text-base placeholder:text-white/30 focus:outline-none transition-all duration-200"
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                }}
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
                 onFocus={(e) => { e.target.style.borderColor = 'rgba(75,159,212,0.5)'; }}
                 onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; }}
               />
             </div>
           </AnimateOnScroll>
 
-          {/* WhatsApp button */}
+          {/* File upload */}
+          <AnimateOnScroll direction="up" delay={0.32}>
+            <div
+              className="mt-3 w-full rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-200"
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                border: `1px dashed ${file ? 'rgba(74,222,128,0.5)' : 'rgba(255,255,255,0.15)'}`,
+                padding: '20px 16px',
+                minHeight: 80,
+              }}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              {file ? (
+                <p style={{ color: '#4ade80', fontSize: 13, fontWeight: 500 }}>
+                  ✅ {file.name}
+                </p>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="rgba(75,159,212,0.6)" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                  </svg>
+                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
+                    Drop your prescription here or <span style={{ color: '#4b9fd4' }}>browse</span>
+                  </p>
+                  <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>JPG, PNG or PDF · max 5MB</p>
+                </>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/jpg,application/pdf"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files[0] || null)}
+              />
+            </div>
+          </AnimateOnScroll>
+
+          {/* Submit button */}
           <AnimateOnScroll direction="up" delay={0.35}>
             <button
               type="button"
-              onClick={handleSendWhatsApp}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-md py-4 font-sans text-base font-bold text-white min-h-[52px] cursor-pointer transition-opacity hover:opacity-90"
-              style={{ backgroundColor: '#25D366' }}
+              onClick={handleSubmit}
+              disabled={loading}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-md py-4 font-sans text-base font-bold text-white min-h-[52px] cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ backgroundColor: '#4b9fd4' }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22" fill="white" style={{ flexShrink: 0 }}>
-                <path d="M16 2.667A13.333 13.333 0 002.667 16c0 2.347.614 4.614 1.68 6.587L2.667 29.333l6.92-1.76A13.267 13.267 0 0016 29.333 13.333 13.333 0 0029.333 16 13.333 13.333 0 0016 2.667zm0 24.267a11.013 11.013 0 01-5.613-1.534l-.4-.24-4.08 1.04 1.08-3.946-.267-.414A10.973 10.973 0 015.027 16C5.027 9.92 9.92 5.027 16 5.027S26.973 9.92 26.973 16 22.08 26.934 16 26.934zm6.027-8.214c-.333-.167-1.96-.967-2.267-1.08-.306-.107-.52-.16-.746.16-.227.32-.867 1.08-1.067 1.306-.2.214-.4.24-.733.08a9.207 9.207 0 01-2.707-1.666 10.1 10.1 0 01-1.867-2.32c-.2-.334-.02-.52.147-.68.16-.147.333-.387.5-.574.16-.186.213-.32.32-.533.107-.214.053-.4-.027-.574-.08-.16-.746-1.8-1.013-2.466-.267-.64-.547-.56-.747-.56-.2-.014-.413-.014-.627-.014a1.2 1.2 0 00-.88.414c-.306.333-1.16 1.133-1.16 2.773s1.187 3.213 1.347 3.44c.16.213 2.333 3.56 5.653 4.993.787.347 1.4.547 1.88.694.787.253 1.507.213 2.067.133.627-.093 1.96-.8 2.24-1.573.28-.76.28-1.414.2-1.56-.094-.134-.307-.214-.64-.374z" />
-              </svg>
-              Send on WhatsApp
+              {loading ? (
+                <>
+                  <svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4" />
+                    <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
+                  Sending...
+                </>
+              ) : (
+                'Submit Prescription'
+              )}
             </button>
-            <p className="mt-2 text-center font-sans text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              WhatsApp will open — please attach your prescription photo before sending.
+
+            {/* Status message */}
+            {status && (
+              <p style={{
+                marginTop: '12px',
+                textAlign: 'center',
+                fontSize: '13px',
+                color: status.type === 'success' ? '#4ade80' : '#f87171',
+                fontWeight: '500',
+              }}>
+                {status.message}
+              </p>
+            )}
+
+            {/* WhatsApp fallback */}
+            <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '12px' }}>
+              <a
+                href={`https://wa.me/${OWNER_WHATSAPP}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#7bb8e0', textDecoration: 'underline' }}
+              >
+                Prefer WhatsApp? Send directly →
+              </a>
             </p>
           </AnimateOnScroll>
 
